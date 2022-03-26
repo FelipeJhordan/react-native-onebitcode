@@ -1,0 +1,19 @@
+## Como criar o projeto
+- npx install -g expo-cli
+- expo init . --template blank
+
+## Estrutura
+- Assets ( arquivos estáticos)
+
+## Components
+### Componentes Básicos
+- View
+- Image
+- Scrollview
+- Text
+- Text Input
+- Stylesheet
+
+### Components de interface de usuário:
+- Button
+- Switch

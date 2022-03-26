@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rn_tutorial",
-    "slug": "rn_tutorial",
+    "name": "onebithealth",
+    "slug": "onebithealth",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
