@@ -5,7 +5,8 @@ import {
     TouchableOpacity,
     Vibration,
     Pressable,
-    Keyboard
+    Keyboard,
+    FlatList
      } from 'react-native'
 import { useState } from 'react'
 
@@ -20,10 +21,13 @@ export default function Form() {
     const [imc, setImc] = useState(null)
     const [textButton, setTextButton] = useState("Calcular")
     const [errorMessage, setErrorMessage] = useState(null)
+    const [imcList, setImcList] = useState([])
 
     function imcCalculator() {
         let heightFormat = height.replace(",",".")
-        return setImc((weight/(heightFormat*heightFormat)).toFixed(2))
+        const totalImc = (weight/(heightFormat*heightFormat)).toFixed(2)
+        setImcList((arr) => [...arr, {id: new Date().getTime(), imc: totalImc}])
+        setImc(totalImc)
     }
 
     function verificationImc() {
@@ -51,22 +55,38 @@ export default function Form() {
 
 
     return (
-        <Pressable onPress={Keyboard.dismiss} style={styles.formContext}>
-            <View style={styles.form}>
-                <Text style={styles.formLabel}>Altura</Text>
-                <Text style={styles.errorMessage}>{errorMessage}</Text>
-                <TextInput placeholder='Ex. 1.75' style={styles.formInput} keyboardType='numeric' onChangeText={setHeight} value={height}/>
+            <View style={styles.formContext}>
+                {imc == null ? 
+                <Pressable onPress={Keyboard.dismiss} style={styles.form}>
+                    <Text style={styles.formLabel}>Altura</Text>
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
+                    <TextInput placeholder='Ex. 1.75' style={styles.formInput} keyboardType='numeric' onChangeText={setHeight} value={height}/>
 
-                <Text style={styles.formLabel}>Peso</Text>
-                <Text style={styles.errorMessage}>{errorMessage}</Text>
-                <TextInput placeholder='Ex. 75.365' style={styles.formInput} keyboardType='numeric' onChangeText={setWeight} value={weight}/>
+                    <Text style={styles.formLabel}>Peso</Text>
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
+                    <TextInput placeholder='Ex. 75.365' style={styles.formInput} keyboardType='numeric' onChangeText={setWeight} value={weight}/>
 
-                <TouchableOpacity style={styles.buttonCalculator} onPress={() => {
-                    validationImc()
-                }}><Text style={styles.textButtonCalculator}>{textButton}</Text></TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonCalculator} onPress={() => {
+                        validationImc()
+                    }}><Text style={styles.textButtonCalculator}>{textButton}</Text></TouchableOpacity>
+                </Pressable>:                 
+                <View style={styles.exibitionResultImc}>
+                    <ResultImc messageResultImc={messageImc} resultImc={imc} />
+                    <TouchableOpacity style={styles.buttonCalculator} onPress={() => {
+                        validationImc()
+                    }}><Text style={styles.textButtonCalculator}>{textButton}</Text></TouchableOpacity>
                 </View>
-
-                <ResultImc messageResultImc={messageImc} resultImc={imc} />
-        </Pressable>
+}
+        <FlatList style={styles.listImcs} showsVerticalScrollIndicator={false} data={imcList.reverse()} keyExtractor={(item) => {
+            item.id
+        }} renderItem={({item}) => {
+            return(
+                <Text style={styles.resultImcItem}>
+                    <Text style={styles.textResultItemList}>  Resultado IMC =</Text>
+                    {item.imc}
+                </Text>
+            )
+        }}></FlatList>
+        </View>
     )
 }

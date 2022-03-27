@@ -17,3 +17,6 @@
 ### Components de interface de usuário:
 - Button
 - Switch
+
+## Listas
+- FlatList mais perfomático ( sempre usar !)
